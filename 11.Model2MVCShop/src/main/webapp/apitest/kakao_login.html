@@ -1,0 +1,57 @@
+<ul>
+	<li onclick="kakaoLogin();">
+		<a href="javascript:void(0)"> 
+			<span><img src="https://img1.daumcdn.net/thumb/R720x0.q80/?scode=mtistory2&fname=http%3A%2F%2Fcfile28.uf.tistory.com%2Fimage%2F99BEE8465C3D7D12140EAC" style="height:60px;width:auto;"></span>	
+		</a>
+	</li>
+	
+	<li onclick="kakaoLogout();">
+		<a href="javascript:void(0)"> 
+			<span>카카오로그아웃</span>
+		</a>
+	</li>
+	
+</ul>
+<!-- 카카오 스크립트 -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+	Kakao.init('2e00cfe75ad365584acc76b588be8d74');
+	
+	console.log(Kakao.isInitialized()); // sdk초기화여부판단
+	
+	// Login
+	function kakaoLogin() {
+		Kakao.Auth.login({
+			success : function(response) {
+				Kakao.API.request({
+					url : '/v2/user/me',
+					success : function(response) {
+						console.log(response)
+					},
+					fail : function(error) {
+						console.log(error)
+					},
+				})
+			},
+			fail : function(error) {
+				console.log(error)
+			},
+		})
+	}
+	
+	// Logout
+	function kakaoLogout() {
+		if (Kakao.Auth.getAccessToken()) {
+			Kakao.API.request({
+				url : '/v1/user/unlink',
+				success : function(response) {
+					console.log(response)
+				},
+				fail : function(error) {
+					console.log(error)
+				},
+			})
+			Kakao.Auth.setAccessToken(undefined)
+		}
+	}
+</script>
